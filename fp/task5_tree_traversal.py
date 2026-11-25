@@ -6,7 +6,6 @@ from dark (visited first) to light (visited last).
 
 import heapq
 from collections import deque
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 
@@ -62,7 +61,7 @@ def color_traversal(order):
     return [(node.val, node.color) for node in order]
 
 
-def show_steps(build_root, traversal, name, save_path=None):
+def show_steps(build_root, traversal, name):
     """Step by step: at step k the first k visited nodes are colored, the rest are gray."""
     root = build_root()
     order = traversal(root)
@@ -80,8 +79,6 @@ def show_steps(build_root, traversal, name, save_path=None):
         ax.axis("off")
     fig.suptitle(f"{name}: order {' -> '.join(str(n.val) for n in order)}", fontsize=14)
     fig.tight_layout()
-    if save_path:
-        fig.savefig(save_path, dpi=80, bbox_inches="tight")
     plt.show()
 
 
@@ -92,14 +89,11 @@ if __name__ == "__main__":
     def build():
         return heap_to_tree(data)
 
-    Path("images").mkdir(exist_ok=True)
-
-    for name, traversal, fname in (("DFS (stack)", dfs_order, "dfs"), ("BFS (queue)", bfs_order, "bfs")):
+    for name, traversal in (("DFS (stack)", dfs_order), ("BFS (queue)", bfs_order)):
         root = build()
         result = color_traversal(traversal(root))
         print(f"{name}: " + ", ".join(f"{v}={c}" for v, c in result))
         # final picture: all nodes colored by traversal order
-        draw_tree(root, title=f"{name}: from dark (first) to light (last)",
-                  save_path=f"images/{fname}_final.png")
+        draw_tree(root, title=f"{name}: from dark (first) to light (last)")
         # step-by-step visualization
-        show_steps(build, traversal, name, save_path=f"images/{fname}_steps.png")
+        show_steps(build, traversal, name)

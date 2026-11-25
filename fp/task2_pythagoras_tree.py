@@ -6,7 +6,6 @@ Usage:  python task2_pythagoras_tree.py        (the recursion level is asked int
 
 import math
 import sys
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
@@ -45,15 +44,13 @@ def draw_square(ax, x, y, size, angle, level, max_level):
     draw_square(ax, apex_x, apex_y, right_size, angle + ANGLE - math.pi / 2, level + 1, max_level)
 
 
-def pythagoras_tree(level, save_path=None):
+def pythagoras_tree(level):
     fig, ax = plt.subplots(figsize=(9, 7))
     draw_square(ax, -0.5, 0, 1, 0, 0, level)
     ax.set_aspect("equal")
     ax.autoscale_view()
     ax.axis("off")
     ax.set_title(f"Pythagoras tree, recursion level = {level}")
-    if save_path:
-        fig.savefig(save_path, dpi=120, bbox_inches="tight")
     plt.show()
 
 
@@ -72,6 +69,4 @@ def read_level():
 
 
 if __name__ == "__main__":
-    lvl = read_level()
-    Path("images").mkdir(exist_ok=True)
-    pythagoras_tree(lvl, save_path=f"images/pythagoras_tree_{lvl}.png")
+    pythagoras_tree(read_level())

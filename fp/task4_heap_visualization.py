@@ -6,7 +6,6 @@ heap_to_tree builds a tree of Node objects from that array, which is then drawn.
 """
 
 import heapq
-from pathlib import Path
 
 from tree_viz import Node, draw_tree
 
@@ -21,12 +20,12 @@ def heap_to_tree(heap, index=0):
     return node
 
 
-def draw_heap(heap, title="Binary heap", save_path=None):
+def draw_heap(heap, title="Binary heap"):
     if not heap:
         print("The heap is empty, nothing to draw.")
         return
     root = heap_to_tree(heap)
-    draw_tree(root, title=title, save_path=save_path)
+    draw_tree(root, title=title)
 
 
 if __name__ == "__main__":
@@ -35,6 +34,4 @@ if __name__ == "__main__":
     heapq.heapify(heap)  # turn the list into a min-heap
     print("Input data: ", data)
     print("Heap array: ", heap)
-
-    Path("images").mkdir(exist_ok=True)
-    draw_heap(heap, title=f"Min-heap: {heap}", save_path="images/heap.png")
+    draw_heap(heap, title=f"Min-heap: {heap}")

@@ -31,7 +31,7 @@ def add_edges(graph, node, pos, x=0, y=0, layer=1):
     return graph
 
 
-def draw_tree(tree_root, title=None, ax=None, save_path=None, node_size=2500):
+def draw_tree(tree_root, title=None, ax=None, node_size=2500):
     """Draw the tree. If `ax` is given, draw into it (without plt.show)."""
     tree = nx.DiGraph()
     pos = {tree_root.id: (0, 0)}
@@ -49,6 +49,4 @@ def draw_tree(tree_root, title=None, ax=None, save_path=None, node_size=2500):
     if title:
         ax.set_title(title)
     if own_figure:
-        if save_path:
-            plt.savefig(save_path, dpi=110, bbox_inches="tight")
         plt.show()

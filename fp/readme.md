@@ -21,7 +21,6 @@ pip install -r requirements.txt
 | `task5_tree_traversal.py` | 5. DFS (stack) and BFS (queue) traversal visualization, colors from dark to light |
 | `task6_food_budget.py` | 6. Greedy algorithm and dynamic programming for choosing food within a budget |
 | `task7_monte_carlo.py` | 7. Monte Carlo method for the sum of two dice |
-| `images/` | Saved visualization results |
 
 ## Running
 
@@ -53,7 +52,8 @@ Merging two sorted lists relinks the existing nodes in O(n + m).
 
 ### Task 2
 
-![Pythagoras tree](images/pythagoras_tree_10.png)
+The program asks for the recursion level and draws the tree: each square gets two smaller squares
+on its top side (scaled by cos 45° and sin 45°), until the chosen level is reached.
 
 ### Task 3
 
@@ -74,18 +74,16 @@ The vertex with the smallest current distance is taken from the binary heap in O
 The heap is stored as an array: the children of element `i` are at indices `2i + 1` and `2i + 2`.
 `heap_to_tree` turns that array into a tree of `Node` objects, which is drawn with the code from the assignment.
 
-![Binary heap](images/heap.png)
-
 ### Task 5
 
 Both traversals are implemented without recursion: DFS uses a stack, BFS uses a queue (`deque`).
 Each visited node gets a unique `#RRGGBB` color, from dark (`#0B1E3F`, first) to light (`#BFE6FF`, last).
+The program shows the final colored tree and a step-by-step view for each traversal.
 
-| DFS (stack) | BFS (queue) |
-|---|---|
-| ![DFS](images/dfs_final.png) | ![BFS](images/bfs_final.png) |
-
-Step-by-step visualization: [DFS](images/dfs_steps.png), [BFS](images/bfs_steps.png).
+```
+DFS (stack): 1 -> 2 -> 4 -> 8 -> 10 -> 7 -> 3 -> 15 -> 20
+BFS (queue): 1 -> 2 -> 3 -> 4 -> 7 -> 15 -> 20 -> 8 -> 10
+```
 
 ### Task 6
 
@@ -101,9 +99,8 @@ finds the optimal set worth 970 calories.
 
 ### Task 7. Monte Carlo method: conclusions
 
-**1,000,000** rolls of two dice were simulated.
-
-![Monte Carlo](images/monte_carlo.png)
+**1,000,000** rolls of two dice were simulated. The program prints the table below and shows a bar chart
+comparing the Monte Carlo and analytical probabilities.
 
 | Sum | Monte Carlo | Analytical | Difference |
 |---|---|---|---|

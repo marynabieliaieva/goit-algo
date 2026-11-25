@@ -1,7 +1,6 @@
 """Task 7. Monte Carlo method: probabilities of sums when rolling two dice."""
 
 import random
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 
@@ -31,7 +30,7 @@ def print_table(mc, exact, counts):
     print(f"\nMax deviation: {max_diff:.3%}")
 
 
-def plot(mc, exact, n, save_path=None):
+def plot(mc, exact, n):
     sums = list(range(2, 13))
     width = 0.4
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -45,8 +44,6 @@ def plot(mc, exact, n, save_path=None):
     ax.set_title("Probabilities of sums when rolling two dice")
     ax.legend()
     fig.tight_layout()
-    if save_path:
-        fig.savefig(save_path, dpi=110)
     plt.show()
 
 
@@ -60,6 +57,4 @@ if __name__ == "__main__":
     for n in (100, 1_000, 10_000, 100_000, 1_000_000):
         p, _ = simulate(n)
         print(f"  {n:>9,} rolls: {max(abs(p[s] - exact[s]) for s in p):.3%}")
-
-    Path("images").mkdir(exist_ok=True)
-    plot(mc, exact, N_THROWS, save_path="images/monte_carlo.png")
+    plot(mc, exact, N_THROWS)
