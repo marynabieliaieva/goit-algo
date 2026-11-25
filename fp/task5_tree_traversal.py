@@ -1,7 +1,7 @@
-"""Завдання 5. Візуалізація обходу бінарного дерева в глибину (DFS, стек) і в ширину (BFS, черга).
+"""Task 5. Visualizing binary tree traversal: depth-first (DFS, stack) and breadth-first (BFS, queue).
 
-Кожен відвіданий вузол отримує унікальний колір у форматі #RRGGBB:
-від темного (перший відвіданий) до світлого (останній).
+Every visited node gets a unique #RRGGBB color,
+from dark (visited first) to light (visited last).
 """
 
 import heapq
@@ -13,12 +13,12 @@ import matplotlib.pyplot as plt
 from task4_heap_visualization import heap_to_tree
 from tree_viz import draw_tree
 
-DARK = (0x0B, 0x1E, 0x3F)   # темно-синій
-LIGHT = (0xBF, 0xE6, 0xFF)  # світло-блакитний
+DARK = (0x0B, 0x1E, 0x3F)   # dark blue
+LIGHT = (0xBF, 0xE6, 0xFF)  # light blue
 
 
 def gradient(n):
-    """Список із n кольорів #RRGGBB від темного до світлого."""
+    """List of n #RRGGBB colors going from dark to light."""
     colors = []
     for i in range(n):
         t = i / (n - 1) if n > 1 else 0
@@ -27,22 +27,13 @@ def gradient(n):
     return colors
 
 
-def count_nodes(root):
-    count, stack = 0, [root] if root else []
-    while stack:
-        node = stack.pop()
-        count += 1
-        stack.extend(child for child in (node.left, node.right) if child)
-    return count
-
-
 def dfs_order(root):
-    """Обхід у глибину (pre-order) за допомогою стека, без рекурсії."""
+    """Depth-first (pre-order) traversal using a stack, no recursion."""
     order, stack = [], [root] if root else []
     while stack:
         node = stack.pop()
         order.append(node)
-        # правий кладемо першим, щоб лівий дістали раніше
+        # push the right child first so the left one is popped earlier
         if node.right:
             stack.append(node.right)
         if node.left:
@@ -51,7 +42,7 @@ def dfs_order(root):
 
 
 def bfs_order(root):
-    """Обхід у ширину за допомогою черги, без рекурсії."""
+    """Breadth-first traversal using a queue, no recursion."""
     order, queue = [], deque([root] if root else [])
     while queue:
         node = queue.popleft()
@@ -64,7 +55,7 @@ def bfs_order(root):
 
 
 def color_traversal(order):
-    """Фарбує вузли у порядку обходу і повертає список (значення, колір)."""
+    """Color the nodes in traversal order and return a list of (value, color)."""
     colors = gradient(len(order))
     for node, color in zip(order, colors):
         node.color = color
@@ -72,7 +63,7 @@ def color_traversal(order):
 
 
 def show_steps(build_root, traversal, name, save_path=None):
-    """Покроково: на кроці k пофарбовано перші k відвіданих вузлів, решта — сірі."""
+    """Step by step: at step k the first k visited nodes are colored, the rest are gray."""
     root = build_root()
     order = traversal(root)
     colors = gradient(len(order))
@@ -84,10 +75,10 @@ def show_steps(build_root, traversal, name, save_path=None):
     for k in range(steps):
         for i, node in enumerate(order):
             node.color = colors[i] if i <= k else "#D3D3D3"
-        draw_tree(root, title=f"{name}: крок {k + 1} — вузол {order[k].val}", ax=axes[k], node_size=900)
+        draw_tree(root, title=f"{name}: step {k + 1}, node {order[k].val}", ax=axes[k], node_size=900)
     for ax in axes[steps:]:
         ax.axis("off")
-    fig.suptitle(f"{name}: порядок {' → '.join(str(n.val) for n in order)}", fontsize=14)
+    fig.suptitle(f"{name}: order {' -> '.join(str(n.val) for n in order)}", fontsize=14)
     fig.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi=80, bbox_inches="tight")
@@ -103,12 +94,12 @@ if __name__ == "__main__":
 
     Path("images").mkdir(exist_ok=True)
 
-    for name, traversal, fname in (("DFS (стек)", dfs_order, "dfs"), ("BFS (черга)", bfs_order, "bfs")):
+    for name, traversal, fname in (("DFS (stack)", dfs_order, "dfs"), ("BFS (queue)", bfs_order, "bfs")):
         root = build()
         result = color_traversal(traversal(root))
         print(f"{name}: " + ", ".join(f"{v}={c}" for v, c in result))
-        # підсумкова картинка: усі вузли пофарбовані за порядком обходу
-        draw_tree(root, title=f"{name}: від темного (перший) до світлого (останній)",
+        # final picture: all nodes colored by traversal order
+        draw_tree(root, title=f"{name}: from dark (first) to light (last)",
                   save_path=f"images/{fname}_final.png")
-        # покрокова візуалізація
+        # step-by-step visualization
         show_steps(build, traversal, name, save_path=f"images/{fname}_steps.png")

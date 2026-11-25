@@ -1,17 +1,17 @@
-"""Завдання 3. Алгоритм Дейкстри з бінарною купою (heapq)."""
+"""Task 3. Dijkstra's algorithm with a binary heap (heapq)."""
 
 import heapq
 
 
 class Graph:
-    """Зважений неорієнтований граф у вигляді списку суміжності."""
+    """Weighted undirected graph stored as an adjacency list."""
 
     def __init__(self):
         self.adj = {}
 
     def add_edge(self, u, v, weight):
         if weight < 0:
-            raise ValueError("Алгоритм Дейкстри не працює з від'ємними вагами")
+            raise ValueError("Dijkstra's algorithm does not support negative weights")
         self.adj.setdefault(u, []).append((v, weight))
         self.adj.setdefault(v, []).append((u, weight))
 
@@ -20,19 +20,19 @@ class Graph:
 
 
 def dijkstra(graph, start):
-    """Повертає (distances, previous): найкоротші відстані від start до всіх вершин
-    і словник попередників для відновлення шляхів."""
+    """Return (distances, previous): shortest distances from `start` to every vertex
+    and a predecessor map used to rebuild the paths."""
     distances = {v: float("inf") for v in graph.vertices()}
     previous = {v: None for v in graph.vertices()}
     distances[start] = 0
 
-    heap = [(0, start)]  # бінарна купа: (відстань, вершина)
+    heap = [(0, start)]  # binary heap of (distance, vertex)
     visited = set()
 
     while heap:
-        dist, u = heapq.heappop(heap)  # вершина з найменшою відстанню за O(log n)
+        dist, u = heapq.heappop(heap)  # vertex with the smallest distance in O(log n)
         if u in visited:
-            continue  # застарілий запис у купі
+            continue  # stale heap entry
         visited.add(u)
 
         for v, weight in graph.adj[u]:
@@ -64,10 +64,10 @@ if __name__ == "__main__":
 
     start = "A"
     dist, prev = dijkstra(g, start)
-    print(f"Найкоротші шляхи від вершини {start}:")
+    print(f"Shortest paths from vertex {start}:")
     for vertex in sorted(dist):
         path = " -> ".join(build_path(prev, vertex))
-        print(f"  {vertex}: відстань {dist[vertex]:>3}   шлях: {path}")
+        print(f"  {vertex}: distance {dist[vertex]:>3}   path: {path}")
 
     assert dist == {"A": 0, "B": 4, "C": 2, "D": 9, "E": 5, "F": 14}
-    print("Перевірку пройдено.")
+    print("Check passed.")

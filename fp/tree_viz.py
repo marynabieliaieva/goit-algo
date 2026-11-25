@@ -1,4 +1,4 @@
-"""Базовий код візуалізації бінарного дерева (із завдання 4), спільний для завдань 4 і 5."""
+"""Base binary tree drawing code (from task 4), shared by tasks 4 and 5."""
 
 import uuid
 
@@ -11,8 +11,8 @@ class Node:
         self.left = None
         self.right = None
         self.val = key
-        self.color = color  # колір вузла
-        self.id = str(uuid.uuid4())  # унікальний ідентифікатор вузла
+        self.color = color  # node color
+        self.id = str(uuid.uuid4())  # unique node identifier
 
 
 def add_edges(graph, node, pos, x=0, y=0, layer=1):
@@ -32,7 +32,7 @@ def add_edges(graph, node, pos, x=0, y=0, layer=1):
 
 
 def draw_tree(tree_root, title=None, ax=None, save_path=None, node_size=2500):
-    """Малює дерево. Якщо передано ax — малює в нього (без plt.show)."""
+    """Draw the tree. If `ax` is given, draw into it (without plt.show)."""
     tree = nx.DiGraph()
     pos = {tree_root.id: (0, 0)}
     tree = add_edges(tree, tree_root, pos)

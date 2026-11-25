@@ -1,5 +1,5 @@
-"""Завдання 6. Вибір їжі з максимальною калорійністю в межах бюджету:
-жадібний алгоритм і динамічне програмування (задача про рюкзак 0/1)."""
+"""Task 6. Choosing food with maximum total calories within a budget:
+a greedy algorithm and dynamic programming (0/1 knapsack)."""
 
 items = {
     "pizza": {"cost": 50, "calories": 300},
@@ -12,8 +12,8 @@ items = {
 
 
 def greedy_algorithm(items, budget):
-    """Беремо страви у порядку спадання співвідношення калорії/вартість,
-    поки вони вміщуються в бюджет. Швидко, але не завжди оптимально."""
+    """Take dishes in descending order of calories/cost ratio while they fit
+    into the budget. Fast, but not always optimal."""
     ranked = sorted(items.items(), key=lambda kv: kv[1]["calories"] / kv[1]["cost"], reverse=True)
     chosen, total_cost, total_calories = [], 0, 0
     for name, info in ranked:
@@ -25,8 +25,8 @@ def greedy_algorithm(items, budget):
 
 
 def dynamic_programming(items, budget):
-    """Класичний рюкзак 0/1: dp[i][b] — максимум калорій з перших i страв при бюджеті b.
-    Завжди дає оптимальний результат. Складність O(n * budget)."""
+    """Classic 0/1 knapsack: dp[i][b] is the max calories using the first i dishes with budget b.
+    Always optimal. Complexity O(n * budget)."""
     names = list(items)
     n = len(names)
     dp = [[0] * (budget + 1) for _ in range(n + 1)]
@@ -35,11 +35,11 @@ def dynamic_programming(items, budget):
         cost = items[names[i - 1]]["cost"]
         calories = items[names[i - 1]]["calories"]
         for b in range(budget + 1):
-            dp[i][b] = dp[i - 1][b]  # не беремо страву
+            dp[i][b] = dp[i - 1][b]  # skip the dish
             if cost <= b:
-                dp[i][b] = max(dp[i][b], dp[i - 1][b - cost] + calories)  # беремо страву
+                dp[i][b] = max(dp[i][b], dp[i - 1][b - cost] + calories)  # take the dish
 
-    # відновлюємо набір страв, ідучи по таблиці назад
+    # rebuild the chosen set by walking the table backwards
     chosen, b = [], budget
     for i in range(n, 0, -1):
         if dp[i][b] != dp[i - 1][b]:
@@ -55,8 +55,8 @@ if __name__ == "__main__":
     for budget in (50, 100, 120):
         g = greedy_algorithm(items, budget)
         d = dynamic_programming(items, budget)
-        print(f"Бюджет {budget}:")
-        print(f"  Жадібний: {g[0]}  вартість={g[1]}  калорії={g[2]}")
-        print(f"  ДП:       {d[0]}  вартість={d[1]}  калорії={d[2]}")
+        print(f"Budget {budget}:")
+        print(f"  Greedy: {g[0]}  cost={g[1]}  calories={g[2]}")
+        print(f"  DP:     {d[0]}  cost={d[1]}  calories={d[2]}")
         assert g[1] <= budget and d[1] <= budget
-        assert d[2] >= g[2]  # ДП ніколи не гірше за жадібний
+        assert d[2] >= g[2]  # DP is never worse than greedy
